@@ -10,7 +10,7 @@ names = {"1":('localhost',"12391"), "2":('localhost',"12392"), "3":('localhost',
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 ip = 'localhost'
-porta = 12345
+porta = 12345 # Porta padrão que será enviada
 
 midIp = 'localhost'
 midPorta = 12388
@@ -32,7 +32,7 @@ def cliente(connection,porta):
 		print("Nome nao existe")
 	
 	else:
-		connection.send("localhost"+" "+ endereco)
+		connection.send(("localhost"+" "+ endereco).encode('utf-8'))
 		
 	#conexao.close()
 	connection.close()	
@@ -49,10 +49,11 @@ def addService(connection,cliente):
 	#print("Tamanho da lista de strings "+ str(len(novoServico)) )
 	#print("Service String:"+novoServico[0])
 
+	print(novoServico)
 
-	names.update({novoServico[0] : novoServico[1]})
+	names.update({novoServico[0] : (novoServico[1], novoServico[2])})
 
-	print("Novo servico adicionado: "+novoServico[0]+" "+names.get(novoServico[0]) )
+	print("Novo servico adicionado: "+str(novoServico[0]) +" "+str(names.get(novoServico[0])))
 	
 	return
 
@@ -61,13 +62,13 @@ def connectMiddleware(ip,porta,minhaPorta):
 	middle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	middle.connect((ip,porta))
 
-	middle.send("addAddress")
+	middle.send("addAddress".encode('utf-8'))
 
 	resposta =str(middle.recv(1024).decode('utf-8'))
 
 	print(resposta)	
 
-	middle.send(str(minhaPorta) )
+	middle.send(str(minhaPorta).encode('utf-8'))
 
 	resposta = str(middle.recv(1024).decode('utf-8'))
 

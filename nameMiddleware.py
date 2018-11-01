@@ -5,6 +5,7 @@ import socket, string
 import sys
 import threading
 import heapq
+import time
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -19,7 +20,7 @@ heap = []
 
 def addNameServer(connection,endClient):
 
-    connection.send("Envie porta a ser utilizada")
+    connection.send("Envie porta a ser utilizada".encode('utf-8'))
 
     porta = str(connection.recv(1024).decode('utf-8'))
 
@@ -29,9 +30,38 @@ def addNameServer(connection,endClient):
     for x,y in heap:
         print(str(x) +" "+ str(y) +" ")
 
-    connection.send("Agora esta connectado")
+    connection.send("Agora esta connectado".encode('utf-8'))
     connection.close()
     return
+
+def sendHeap(mensagem, parIpPorta):
+	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	ip,porta = parIpPorta
+
+	server.connect((str(ip),int(porta)))
+
+	server.send("addService".encode('utf-8'))
+
+	print("Requisicao de criacao de servico sendo realizada ...")
+	time.sleep(1)
+
+	server.send(mensagem.encode('utf-8'))
+
+	server.close()
+	return
+
+def addService(connection,endClient):
+	connection.send("Envie porta a ser utilizada".encode('utf-8'))
+
+	mensagem_service = str(connection.recv(1024).decode('utf-8'))
+
+
+	for x,y in heap:
+		sendHeap(mensagem_service,y)
+
+	connection.send("Agora esta connectado".encode('utf-8'))
+	connection.close()
+	return
 
 def getNameAddress(connection, endClient):
 
@@ -45,11 +75,9 @@ def getNameAddress(connection, endClient):
     
     print("Enviando "+ str(priority)+ " e " + str(address))
 
-    connection.send(str(ip)+" "+str(porta))
+    connection.send((str(ip)+" "+str(porta)).encode('utf-8'))
     connection.close()
     return 
-
-
 
 while True:
     connection,endClient = server.accept()
@@ -65,6 +93,10 @@ while True:
     if(tipo == 'getAddress'):
         linha = threading.Thread(target= getNameAddress, args= (connection,endClient))
         linha.start()
+
+    if(tipo == 'addService'):
+    	linha = threading.Thread(target = addService, args = (connection, endClient))
+    	linha.start()
     
 server.close()
 

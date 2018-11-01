@@ -3,6 +3,11 @@ import socket
 import sys
 import threading
 
+ip = 'localhost'
+porta = 12391
+
+ipMiddleware = 'localhost'
+portaMiddleware = 12388
 
 def cliente(connection,client):
 	pedido= connection.recv(1024).decode('utf-8')
@@ -17,22 +22,39 @@ def cliente(connection,client):
 		resposta = int(pedido) * 10
 	
 
-	connection.send( str(resposta))
+	connection.send( str(resposta).encode('utf-8'))
 
 	connection.close()	
 
 
+def connectMiddleware(ip,porta,meuIP,minhaPorta):
+	
+	middle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	middle.connect((ip,porta))
 
+	middle.send("addService".encode('utf-8'))
+
+	resposta =str(middle.recv(1024).decode('utf-8'))
+
+	print(resposta)	
+
+	middle.send(('1 ' + str(meuIP) + " " + str(minhaPorta)).encode('utf-8'))
+
+	resposta = str(middle.recv(1024).decode('utf-8'))
+
+	print(resposta)
+
+	middle.close()
+	return
+
+connectMiddleware(ipMiddleware, portaMiddleware, ip, porta)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-ip = 'localhost'
-porta = 12344 + 1
 
 server.bind((ip,porta))
 server.listen(10)
 
-print("Servidor 1 ativo")
+print("Servico 1 ativo")
 print("Esperando pedidos do DNS")
 while True:
 	co,pedido = server.accept()
