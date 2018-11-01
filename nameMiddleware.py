@@ -70,7 +70,7 @@ def getNameAddress(connection, endClient):
     priority , address = element
     ip, porta = address
     
-    heapq.heappush(heap,(priority + 1 , address))
+    heapq.heappush(heap,((priority%30)+1 , address)) # para não começar de zero e ter um limite para a prioridade
 
     
     print("Enviando "+ str(priority)+ " e " + str(address))
