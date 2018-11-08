@@ -37,7 +37,9 @@ def requestService(ip,porta,serviceName):
 
 	nameServer.send(opcao)
 
-	ipService, portaService = str(nameServer.recv(1024).decode('utf-8')).split(" ")
+	data = str(nameServer.recv(1024).decode('utf-8')).split(" ")
+
+	ipService, portaService = data
 
 	nameServer.close()
 	return ipService, portaService
@@ -47,7 +49,9 @@ def requestService(ip,porta,serviceName):
 
 print("Requisitando endereco do servidor de nomes:")
 
-ipName,portaName = requestNameServer(ip,porta)
+data = requestNameServer(ip,porta)
+
+ipName,portaName = data
 
 print("Recebi "+ str(ipName)+" "+str(portaName))
 
@@ -55,7 +59,10 @@ sys.stdout.flush()
 
 print("Requisitando endereco do servico:")
 
-ipService,portaService = requestService(ipName,portaName,1)
+data = requestService(ipName,portaName,1)
+
+
+ipService,portaService = data
 
 print("Recebi "+ str(ipService)+" "+str(portaService))
 

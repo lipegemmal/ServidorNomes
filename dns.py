@@ -32,7 +32,7 @@ def cliente(connection,porta):
 		print("Nome nao existe")
 	
 	else:
-		connection.send(("localhost"+" "+ endereco).encode('utf-8'))
+		connection.send(("localhost"+" "+ str(endereco)).encode('utf-8'))
 		
 	#conexao.close()
 	connection.close()	
