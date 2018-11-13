@@ -1,4 +1,4 @@
-#Cliente basico acesso indireto de Felipe Gemmal
+#Cliente basico acesso indireto de Felipe Gemmal, Carlos Henrique Rorato Souza
 # -*- coding: utf-8 -*-
 import os
 import socket, string

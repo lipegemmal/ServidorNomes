@@ -1,4 +1,4 @@
-#Servidor para cliente de acesso indireto de Felipe Gemmal
+#Servidor para cliente de acesso indireto de Felipe Gemmal, Carlos Henrique Rorato Souza
 # -*- coding: utf-8 -*-
 import socket
 import sys

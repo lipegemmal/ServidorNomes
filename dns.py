@@ -1,11 +1,11 @@
-#Servidor intermediario para acesso indireto de Felipe Gemmal
+#Servidor intermediario para acesso indireto de Felipe Gemmal, Carlos Henrique Rorato Souza
 # -*- coding: utf-8 -*-
 import socket
 import sys
 import threading
 
-
-names = {"1":('localhost',"12391"), "2":('localhost',"12392"), "3":('localhost',"12393")}
+#dados dos serviços, com palavras-chave
+names = {"1":('localhost',"12391", "video"), "2":('localhost',"12392", "audio"), "3":('localhost',"12393", "imagem")}
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

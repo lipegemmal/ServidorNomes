@@ -1,4 +1,4 @@
-#Cliente basico acesso indireto de Felipe Gemmal
+#Cliente basico acesso indireto de Felipe Gemmal, Carlos Henrique Rorato Souza
 # -*- coding: utf-8 -*-
 import os
 import socket, string
@@ -24,7 +24,7 @@ def requestNameServer(ip, porta):
 	middleServer.close()
 	return ipService, portaService
 
-
+#Modificação: o cliente deverá mandar a característica!
 def requestService(ip,porta,serviceName):
 	nameServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	nameServer.connect((ip, int(porta) ))
@@ -35,7 +35,7 @@ def requestService(ip,porta,serviceName):
 
 	opcao = raw_input()
 
-	nameServer.send(opcao)
+	nameServer.send(opcao) #aqui ele manda a característica para o dns
 
 	data = str(nameServer.recv(1024).decode('utf-8')).split(" ")
 

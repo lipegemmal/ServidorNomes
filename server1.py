@@ -1,4 +1,4 @@
-#Servidor para cliente de acesso indireto de Felipe Gemmal
+#Servidor para cliente de acesso indireto de Felipe Gemmal, Carlos Henrique Rorato Souza
 import socket
 import sys
 import threading
