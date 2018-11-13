@@ -4,8 +4,13 @@ import socket
 import sys
 import threading
 
-#dados dos serviços, com palavras-chave na chave
-names = {["1","video"]:('localhost',"12391"), ["2","audio"]:('localhost',"12392"), ["3","imagem"]:('localhost',"12393")}
+#dados dos serviços
+names = {"1":('localhost',"12391"), "2":('localhost',"12392"), "3":('localhost',"12393")}
+
+#Para cada serviço, uma lista com suas palavras-chave
+listaS1 = ["video","engraçado","youtube","comedia"]
+listaS2 = ["audio","musica"]
+listaS3 = ["imagem","foto"]
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -20,17 +25,33 @@ def cliente(connection,porta):
 
 	print("Thread criada")
 	nomeServico= str(connection.recv(1024).decode('utf-8'))
-		
+	
+	encontrou = 0
+
 	if nomeServico == "":
 		print("Sem dados")
 		return
 
 	print(nomeServico)
-	endereco = names.get(nomeServico,-1) #aqui ele deve procurar pela característica ou pelo número (o que estiver na lista)
+	endereco = names.get(nomeServico,-1) #aqui ele deve procurar pelo número
 	
-	if(endereco == -1):
-		print("Nome nao existe")
-	
+	if(endereco == -1): #para cada serviço, caso não ache o número do serviço, vai procurar pelas palavras chave:
+		
+		for(x in listaS1): #Serviço 1
+			if(x == nomeServico): 
+				connection.send(("localhost"+" "+ names.get("1",-1)).encode('utf-8'))
+				encontrou = 1
+		for(y in listaS2): #Serviço 2
+			if(y == nomeServico):
+				connection.send(("localhost"+" "+ names.get("1",-1)).encode('utf-8'))
+				encontrou = 1
+		for(k in listaS3): #Serviço 3
+			if(k == nomeServico):
+				connection.send(("localhost"+" "+ names.get("1",-1)).encode('utf-8'))
+				encontrou = 1
+
+		if(encontrou == 0) print("Nome nao existe")
+
 	else:
 		connection.send(("localhost"+" "+ str(endereco)).encode('utf-8'))
 		
