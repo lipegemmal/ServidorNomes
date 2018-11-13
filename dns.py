@@ -4,8 +4,8 @@ import socket
 import sys
 import threading
 
-#dados dos serviços, com palavras-chave
-names = {"1":('localhost',"12391", "video"), "2":('localhost',"12392", "audio"), "3":('localhost',"12393", "imagem")}
+#dados dos serviços, com palavras-chave na chave
+names = {["1","video"]:('localhost',"12391"), ["2","audio"]:('localhost',"12392"), ["3","imagem"]:('localhost',"12393")}
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -26,7 +26,7 @@ def cliente(connection,porta):
 		return
 
 	print(nomeServico)
-	endereco = names.get(nomeServico,-1)
+	endereco = names.get(nomeServico,-1) #aqui ele deve procurar pela característica ou pelo número (o que estiver na lista)
 	
 	if(endereco == -1):
 		print("Nome nao existe")
