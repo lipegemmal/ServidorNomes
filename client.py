@@ -17,25 +17,26 @@ def requestNameServer(ip, porta):
 	middleServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	middleServer.connect((ip,porta))
 
-	middleServer.send("getAddress")
+	middleServer.send("getAddress".encode('utf-8'))
 
 	ipService, portaService = str(middleServer.recv(1024).decode('utf-8')).split(" ")
 
 	middleServer.close()
 	return ipService, portaService
 
-#Modificação: o cliente deverá mandar a característica!
+
 def requestService(ip,porta,serviceName):
 	nameServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	nameServer.connect((ip, int(porta) ))
 
-	nameServer.send("request")
+	nameServer.send("request".encode('utf-8'))
 
 	print("Informe o serviço desejado: ")
 
-	opcao = raw_input()
+	opcao = input()
+	#opcao = raw_input() - deu erro no meu windows - Carlos
 
-	nameServer.send(opcao) #aqui ele manda a característica para o dns
+	nameServer.send(opcao.encode('utf-8')) #aqui ele manda a característica para o dns
 
 	data = str(nameServer.recv(1024).decode('utf-8')).split(" ")
 

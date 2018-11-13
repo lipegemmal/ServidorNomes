@@ -36,21 +36,22 @@ def cliente(connection,porta):
 	endereco = names.get(nomeServico,-1) #aqui ele deve procurar pelo número
 	
 	if(endereco == -1): #para cada serviço, caso não ache o número do serviço, vai procurar pelas palavras chave:
-		
-		for(x in listaS1): #Serviço 1
+
+		for x in listaS1 : #Serviço 1
 			if(x == nomeServico): 
-				connection.send(("localhost"+" "+ names.get("1",-1)).encode('utf-8'))
+				#connection.send(("localhost"+" "+ str(names.get("1",-1))).encode('utf-8'))
+				connection.send((str(names.get("1",-1))).encode('utf-8'))
 				encontrou = 1
-		for(y in listaS2): #Serviço 2
+		for y in listaS2 : #Serviço 2
 			if(y == nomeServico):
-				connection.send(("localhost"+" "+ names.get("1",-1)).encode('utf-8'))
+				connection.send(("localhost"+" "+ str(names.get("2",-1))).encode('utf-8'))
 				encontrou = 1
-		for(k in listaS3): #Serviço 3
+		for k in listaS3 : #Serviço 3
 			if(k == nomeServico):
-				connection.send(("localhost"+" "+ names.get("1",-1)).encode('utf-8'))
+				connection.send(("localhost"+" "+ str(names.get("3",-1))).encode('utf-8'))
 				encontrou = 1
 
-		if(encontrou == 0) print("Nome nao existe")
+		if(encontrou == 0): print("Nome nao existe")
 
 	else:
 		connection.send(("localhost"+" "+ str(endereco)).encode('utf-8'))
