@@ -42,8 +42,11 @@ def sendHeap(mensagem, parIpPorta):
 
 	server.send("addService".encode('utf-8'))
 
-	print("Requisicao de criacao de servico sendo realizada ...")
-	time.sleep(1)
+	#print("Requisicao de criacao de servico sendo realizada ...")
+	#time.sleep(1)
+    
+	resposta = str(server.recv(1024).decode('utf-8'))
+
 
 	server.send(mensagem.encode('utf-8'))
 

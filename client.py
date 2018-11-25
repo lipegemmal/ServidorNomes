@@ -31,6 +31,8 @@ def requestService(ip,porta,serviceName):
 
 	nameServer.send("request".encode('utf-8'))
 
+	resposta = str(nameServer.recv(1024).decode('utf-8'))
+
 	print("Informe o serviço desejado: ")
 
 	opcao = input()
@@ -62,6 +64,8 @@ print("Requisitando endereco do servico:")
 
 data = requestService(ipName,portaName,1)
 
+if( str(data) == "N"):
+	print("Informação errada")
 
 ipService,portaService = data
 
