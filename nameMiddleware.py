@@ -34,37 +34,46 @@ def addNameServer(connection,endClient):
     connection.close()
     return
 
-def sendHeap(mensagem, parIpPorta):
-	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	ip,porta = parIpPorta
+def sendHeap(mensagem,chaves,parIpPorta):
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ip,porta = parIpPorta
 
-	server.connect((str(ip),int(porta)))
+    server.connect((str(ip),int(porta)))
 
-	server.send("addService".encode('utf-8'))
+    server.send("addService".encode('utf-8'))
 
 	#print("Requisicao de criacao de servico sendo realizada ...")
 	#time.sleep(1)
     
-	resposta = str(server.recv(1024).decode('utf-8'))
+    resposta = str(server.recv(1024).decode('utf-8'))
 
+    #envia ip e porta do servico
+    server.send(mensagem.encode('utf-8'))
 
-	server.send(mensagem.encode('utf-8'))
+    
+    resposta = str(server.recv(1024).decode('utf-8'))
 
-	server.close()
-	return
+    server.send(chaves.encode('utf-8'))
+
+    resposta = str(server.recv(1024).decode('utf-8'))
+
+    server.close()
+    return
 
 def addService(connection,endClient):
-	connection.send("Envie porta a ser utilizada".encode('utf-8'))
+    connection.send("Envie porta a ser utilizada".encode('utf-8'))
+    mensagem_service = str(connection.recv(1024).decode('utf-8'))
 
-	mensagem_service = str(connection.recv(1024).decode('utf-8'))
+    connection.send("Ip e porta recebidos".encode('utf-8'))
+	
+    chaves = str(connection.recv(1024).decode('utf-8'))
 
+    for x,y in heap:
+    	sendHeap(mensagem_service,chaves,y)
 
-	for x,y in heap:
-		sendHeap(mensagem_service,y)
-
-	connection.send("Agora esta connectado".encode('utf-8'))
-	connection.close()
-	return
+    connection.send("Agora esta connectado".encode('utf-8'))
+    connection.close()
+    return
 
 def getNameAddress(connection, endClient):
 

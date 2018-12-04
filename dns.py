@@ -3,26 +3,27 @@
 import socket
 import sys
 import threading
+#dados guardados em maps
+#names = {"1":("localhost","1234")}
+#keys = {"1":(listaS1)}
 
-#dados dos serviços
-#names = {"1":('localhost',"12391"), "2":('localhost',"12392"), "3":('localhost',"12393")}
 names = {}
 keys ={}
 
 #Para cada serviço, uma lista com suas palavras-chave
-listaS1 = ["video","engraçado","youtube","comedia"]
-listaS2 = ["audio","musica"]
-listaS3 = ["imagem","foto"]
+#listaS1 = ["video","engraçado","youtube","comedia"]
+#listaS2 = ["audio","musica"]
+#listaS3 = ["imagem","foto"]
 
-#Elas são guardadas em um map 
-#keys = {"1":listaS1, "2":listaS2, "3":listaS3}
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+#ip e porta do servidor de nomes
 ip = 'localhost'
-porta = 12345 # Porta padrão que será enviada
+porta = 12347 # Porta padrão que será enviada
 
+#ip e porta do middleware
 midIp = 'localhost'
 midPorta = 12388
 
@@ -90,9 +91,18 @@ def addService(connection,cliente):
 
 	connection.send("OK".encode('utf-8'))
 
+	#recebe nome , ip e porta do serviço
 	novoServico= str(connection.recv(1024).decode('utf-8')).split(" ")
 	
-	listaAux =[]
+	print(novoServico)
+
+	connection.send("OK".encode('utf-8'))
+
+	#recebe as chaves de busca do novo servico
+	chavesServico = str(connection.recv(1024).decode('utf-8')).split(" ")
+
+	print(chavesServico)
+	
 
 	#print("Colocando a chave: "+novoServico[0]+" e valor : "+novoServico[1]+" no dicionario")
 
@@ -101,14 +111,17 @@ def addService(connection,cliente):
 
 	print(novoServico)
 
-	for x in range (3,len(novoServico)):
-		listaAux.append(novoServico[x])
+	#for x in range (3,len(novoServico)):
+	#	listaAux.append(novoServico[x])
 
 	names.update({novoServico[0] : (novoServico[1], novoServico[2])})
-	keys.update({novoServico[0]: listaAux})
+	keys.update({novoServico[0]: chavesServico})
 
 	print("Novo servico adicionado: "+str(novoServico[0]) +" "+str(names.get(novoServico[0])))
+
+	connection.send("Novo servico adicionado".encode('utf-8'))
 	
+	connection.close()
 	return
 
 def connectMiddleware(ip,porta,minhaPorta):

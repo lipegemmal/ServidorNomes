@@ -1,13 +1,19 @@
 #Servidor para cliente de acesso indireto de Felipe Gemmal, Carlos Henrique Rorato Souza
+# -*- coding: utf-8 -*-
 import socket
 import sys
 import threading
 
+#informações do serviço
 ip = 'localhost'
 porta = 12391
 
+#informaçoes do middleware
 ipMiddleware = 'localhost'
 portaMiddleware = 12388
+
+name = '1'
+data = "teste1 batata"
 
 def cliente(connection,client):
 	pedido= connection.recv(1024).decode('utf-8')
@@ -27,7 +33,7 @@ def cliente(connection,client):
 	connection.close()	
 
 
-def connectMiddleware(ip,porta,meuIP,minhaPorta):
+def connectMiddleware(ip,porta,data,meuIP,minhaPorta):
 	
 	middle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	middle.connect((ip,porta))
@@ -44,10 +50,16 @@ def connectMiddleware(ip,porta,meuIP,minhaPorta):
 
 	print(resposta)
 
+	middle.send((data).encode('utf-8'))
+
+	resposta = str(middle.recv(1024).decode('utf-8'))
+
+	print(resposta)	
+
 	middle.close()
 	return
 
-connectMiddleware(ipMiddleware, portaMiddleware, ip, porta)
+connectMiddleware(ipMiddleware, portaMiddleware,data ,ip, porta)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
