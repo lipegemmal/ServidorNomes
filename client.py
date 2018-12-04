@@ -25,27 +25,50 @@ def requestNameServer(ip, porta):
 	return ipService, portaService
 
 
-def requestService(ip,porta,serviceName):
+def requestService(ip,porta):
 	nameServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	nameServer.connect((ip, int(porta) ))
 
 	nameServer.send("request".encode('utf-8'))
-
+	
 	resposta = str(nameServer.recv(1024).decode('utf-8'))
 
 	print("Informe o serviço desejado: ")
 
-	opcao = input()
+	opcao = raw_input()
 	#opcao = raw_input() - deu erro no meu windows - Carlos
 
 	nameServer.send(opcao.encode('utf-8')) #aqui ele manda a característica para o dns
 
 	data = str(nameServer.recv(1024).decode('utf-8')).split(" ")
 
-	ipService, portaService = data
+	#ipService, portaService = data
 
 	nameServer.close()
-	return ipService, portaService
+	return data  #ipService, portaService
+
+
+def requestServiceKey(ip,porta):
+	nameServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	nameServer.connect((ip, int(porta) ))
+
+	nameServer.send("keyRequest".encode('utf-8'))
+	
+	resposta = str(nameServer.recv(1024).decode('utf-8'))
+
+	print("Informe o serviço desejado: ")
+
+	opcao = raw_input()
+	#opcao = raw_input() - deu erro no meu windows - Carlos
+
+	nameServer.send(opcao.encode('utf-8')) #aqui ele manda a característica para o dns
+
+	data = str(nameServer.recv(1024).decode('utf-8')).split(" ")
+
+	#ipService, portaService = data
+
+	nameServer.close()
+	return  data  #ipService, portaService
 
 
 
@@ -60,18 +83,28 @@ print("Recebi "+ str(ipName)+" "+str(portaName))
 
 sys.stdout.flush()
 
-print("Requisitando endereco do servico:")
+while(True):
+	print("N para busca por nome. C para busca por chave:")
+	tipo = raw_input()
+	if(tipo =="N"):
+		data = requestService(ipName,portaName)
+	elif(tipo == "C"):
+		data = requestServiceKey(ipName,portaName)
+	else:
+		data = ("N","N")
 
-data = requestService(ipName,portaName,1)
+	if( data[0] == "N"):
+		print("Informação errada ou nome não encontrado ")	
+	else:
+		break
 
-if( str(data) == "N"):
-	print("Informação errada")
+print(data)
 
 ipService,portaService = data
 
 print("Recebi "+ str(ipService)+" "+str(portaService))
 
-sys.stdout.flush()
+#sys.stdout.flush()
 
 
 

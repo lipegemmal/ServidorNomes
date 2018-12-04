@@ -6,7 +6,7 @@ import threading
 
 #informações do serviço
 ip = 'localhost'
-porta = 12391
+porta = 12393
 
 #informaçoes do middleware
 ipMiddleware = 'localhost'
