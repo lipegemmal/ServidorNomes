@@ -4,19 +4,27 @@ import socket
 import sys
 import threading
 
+#serviço ip /porta
+ip = 'localhost'
+porta = 12346 
+
+#informaçoes do middleware
+ipMiddleware = 'localhost'
+portaMiddleware = 12388
+
+myName = '2'
+keys = "sexo maioridade"
+
 
 def cliente(connection,client):
-	pedido= str(connection.recv(1024).decode('utf-8')).split()
+	string = ("Servico de teste de maioridade, envie sexo(F/M) e idade em uma linha")
+	connection.send(("1 "+string).encode('utf-8'))
+
+	pedido= str(connection.recv(1024).decode('utf-8')).split(" ")
 
 	#verificando erros		
 	if len(pedido) != 2 :
 		resposta = "Dados_de_entrada_invalidos"
-
-	elif not (type(pedido[0]) is str):
-		resposta = "Dado_1_invalido"
-
-	elif not (type( pedido[1] ) is int):
-		resposta = "Dado_2_invalido"
 
 	#executando função do serviço
 	elif pedido[0] == "F":
@@ -43,10 +51,36 @@ def cliente(connection,client):
 	connection.close()	
 
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def connectMiddleware(ip, porta, meuNome,keys, meuIP, minhaPorta):
 
-ip = 'localhost'
-porta = 12344 + 2
+	middle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	middle.connect((ip, porta))
+
+	middle.send("addService".encode('utf-8'))
+
+	resposta = str(middle.recv(1024).decode('utf-8'))
+
+	print(resposta)
+
+	middle.send((meuNome+" "+ str(meuIP) + " " + str(minhaPorta)).encode('utf-8'))
+
+	resposta = str(middle.recv(1024).decode('utf-8'))
+
+	print(resposta)
+
+	middle.send((keys).encode('utf-8'))
+
+	resposta = str(middle.recv(1024).decode('utf-8'))
+
+	print(resposta)
+
+	middle.close()
+	return
+
+connectMiddleware(ipMiddleware,portaMiddleware,myName,keys,ip,porta)
+
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server.bind((ip,porta))
 server.listen(10)

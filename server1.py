@@ -12,11 +12,13 @@ porta = 12393
 ipMiddleware = 'localhost'
 portaMiddleware = 12388
 
-name = '1'
-data = "teste1 batata"
+myName = '1'
+keys = "matematica multiplicacao"
 
 def cliente(connection,client):
 	string = ("Servico de multiplicacao, envie um numero")
+	
+	#toda primeira mensagem funciona como numero de mensagens que serão trocadas + uma mensagem de introdução
 	connection.send(("1 "+string).encode('utf-8'))
 	
 	pedido= str(connection.recv(1024).decode('utf-8'))
@@ -34,7 +36,7 @@ def cliente(connection,client):
 	connection.close()	
 
 
-def connectMiddleware(ip,porta,data,meuIP,minhaPorta):
+def connectMiddleware(ip,porta,meuNome,keys,meuIP,minhaPorta):
 	
 	middle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	middle.connect((ip,porta))
@@ -45,13 +47,13 @@ def connectMiddleware(ip,porta,data,meuIP,minhaPorta):
 
 	print(resposta)	
 
-	middle.send(('1 ' + str(meuIP) + " " + str(minhaPorta)).encode('utf-8'))
+	middle.send((meuNome+" " + str(meuIP) + " " + str(minhaPorta)).encode('utf-8'))
 
 	resposta = str(middle.recv(1024).decode('utf-8'))
 
 	print(resposta)
 
-	middle.send((data).encode('utf-8'))
+	middle.send((keys).encode('utf-8'))
 
 	resposta = str(middle.recv(1024).decode('utf-8'))
 
@@ -60,7 +62,7 @@ def connectMiddleware(ip,porta,data,meuIP,minhaPorta):
 	middle.close()
 	return
 
-connectMiddleware(ipMiddleware, portaMiddleware,data ,ip, porta)
+connectMiddleware(ipMiddleware, portaMiddleware,myName,keys ,ip, porta)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
