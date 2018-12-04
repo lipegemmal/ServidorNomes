@@ -104,10 +104,35 @@ ipService,portaService = data
 
 print("Recebi "+ str(ipService)+" "+str(portaService))
 
-#sys.stdout.flush()
+servico = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+servico.connect((ipService, int(portaService) ))
 
+data = str(servico.recv(1024).decode('utf-8')).split(" ")
 
+print(data)
+n_it = data[0]
+print(n_it)
+
+message = data[1] +" "
+
+#montando a mensagem de introdução do serviço
+for x in range (2,len(data)):
+	message +=data[x]
+	message +=" "
+
+#comunicação com o serviço, o loop terá o tamanho ditado pelo serviço
+for x in range(int(n_it)):
+
+	print(message)
+	arg = raw_input()
+	servico.send(arg.encode('utf-8'))
+
+	message = str(servico.recv(1024).decode('utf-8')).split(" ")
+
+#mensagem de resposta
+for x in range (len(message)):
+	print(message[x])
 
 
 #while True:

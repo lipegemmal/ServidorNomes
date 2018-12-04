@@ -16,16 +16,17 @@ name = '1'
 data = "teste1 batata"
 
 def cliente(connection,client):
-	pedido= connection.recv(1024).decode('utf-8')
+	string = ("Servico de multiplicacao, envie um numero")
+	connection.send(("1 "+string).encode('utf-8'))
+	
+	pedido= str(connection.recv(1024).decode('utf-8'))
 
-	if len(pedido) != 1:
-		resposta = "Numero_errado_de_dados"
-
-	elif not (type(pedido[0]) is str):
-		resposta = "Entrada_nao_numerica"
-		
-	else:
-		resposta = int(pedido) * 10
+	#if len(pedido) != 1:
+	#	resposta = "Numero_errado_de_dados"
+	#elif not (type(pedido[0]) is str):
+	#	resposta = "Entrada_nao_numerica"
+	#else:
+	resposta = int(pedido) * 10
 	
 
 	connection.send( str(resposta).encode('utf-8'))
@@ -67,7 +68,6 @@ server.bind((ip,porta))
 server.listen(10)
 
 print("Servico 1 ativo")
-print("Esperando pedidos do DNS")
 while True:
 	co,pedido = server.accept()
 	linha = threading.Thread(target=cliente,args=(co,pedido))
