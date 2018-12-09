@@ -22,6 +22,9 @@ def cliente(connection,client):
 
 	pedido= str(connection.recv(1024).decode('utf-8')).split(" ")
 
+	print(pedido)
+	print(len(pedido))
+
 	#verificando erros		
 	if len(pedido) != 2 :
 		resposta = "Dados_de_entrada_invalidos"

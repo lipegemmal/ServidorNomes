@@ -21,7 +21,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 #ip e porta do servidor de nomes
 ip = 'localhost'
-porta = 12350 # Porta padrão que será enviada
+porta = 12351 # Porta padrão que será enviada
 
 #ip e porta do middleware
 midIp = 'localhost'
@@ -34,17 +34,16 @@ def cliente(connection,porta):
 	
 	connection.send("OK".encode('utf-8'))
 	
-	nomeServico= str(connection.recv(1024).decode('utf-8'))
+	nomeServico= str(connection.recv(1024).decode('utf-8')).split(" ")
 	
-	if nomeServico == "":
+	if nomeServico[0] == "":
 		print("Sem dados")
 		connection.send(("N").encode('utf-8'))
 		connection.close()
 		return
 
 	print(nomeServico)
-	endereco = names.get(nomeServico,-1) #aqui ele deve procurar pelo nome do serviço
-	returnip,returnporta = endereco
+	endereco = names.get(nomeServico[0],-1) #aqui ele deve procurar pelo nome do serviço
 	
 
 	#Não encontrou o serviço
@@ -52,6 +51,7 @@ def cliente(connection,porta):
 		connection.send(("N").encode('utf-8'))
 	#Encontrou o nome do serviço
 	else:
+		returnip, returnporta = endereco
 		connection.send((str(returnip)+" "+ returnporta).encode('utf-8'))
 		
 	connection.close()	
@@ -64,22 +64,22 @@ def clienteKey(connection, porta):
 
 	connection.send("OK".encode('utf-8'))
 
-	nomeServico = str(connection.recv(1024).decode('utf-8'))
+	nomeServico = str(connection.recv(1024).decode('utf-8')).split(" ")
 
-	if nomeServico == "":
+	if nomeServico[0] == "":
 		print("Sem dados")
 		connection.send(("N").encode('utf-8'))
 		connection.close()
 		return
 
-	print("Procurando por:"+nomeServico)
+	print("Procurando por:"+nomeServico[0])
 	# aqui ele deve procurar pelo nome do serviço
 	encontrou = 0
 
 	for x in keys.keys():   #para cada serviço
 		y = keys.get(x)		#pegar as descrições
 		for z in range (len(y)):  #e comparar ela com o que o cliente mandou
-			if(y[z] == nomeServico):
+			if(y[z] == nomeServico[0]):
 				encontrou = 1
 				servico = x
 				break
